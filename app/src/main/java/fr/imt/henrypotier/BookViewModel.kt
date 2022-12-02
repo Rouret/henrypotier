@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class BookViewModel : ViewModel() {
     val state = MutableLiveData<BookState>()
 
-    fun getRetrofite(): Retrofit {
+    fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://henri-potier.techx.fr")
             .addConverterFactory(GsonConverterFactory.create())
@@ -20,7 +20,7 @@ class BookViewModel : ViewModel() {
     }
 
     fun loadBooks() {
-        val service: BookService = getRetrofite().create(BookService::class.java)
+        val service: BookService = getRetrofit().create(BookService::class.java)
 
         state.postValue(BookState(emptyList(), true))
 

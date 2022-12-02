@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 
@@ -19,14 +20,12 @@ class LibraryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
 
         val config = RealmConfiguration.Builder(schema = setOf())
             .build()
         this.realm = Realm.open(config)
 
-        setSupportActionBar(toolbar)
-
+        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         viewModel.state.observe(this) { state ->
             Toast.makeText(
                 this@LibraryActivity,
