@@ -6,18 +6,42 @@ import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+
 
 class LibraryActivity : AppCompatActivity() {
+
+    private lateinit var realm: Realm
+    private val viewModel by lazy { BookViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
 
-        val messageTextView = findViewById<TextView>(R.id.messageTextView)
-        // TODO call text on messageTextView
+        val config = RealmConfiguration.Builder(schema = setOf())
+            .build()
+        this.realm = Realm.open(config)
 
         setSupportActionBar(toolbar)
+
+        viewModel.state.observe(this) { state ->
+            Toast.makeText(
+                this@LibraryActivity,
+                "${state.books.size} books | isLoading ${state.isLoading}",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+
+        viewModel.loadBooks()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.realm.close()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
