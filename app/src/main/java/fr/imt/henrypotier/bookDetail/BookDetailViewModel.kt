@@ -17,6 +17,10 @@ class BookDetailViewModel(private val datasource: BookViewModel) : ViewModel() {
     fun removeBook(book: Book) {
         //datasource.removeBook(book)
     }
+
+    fun getBookForId(id: String) : Book? {
+        return datasource.getBookForId(id)
+    }
 }
 
 class BookDetailViewModelFactory(private val context: Context) : ViewModelProvider.Factory {

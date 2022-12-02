@@ -22,6 +22,10 @@ class BookViewModel : ViewModel() {
             .build()
     }
 
+    fun getBookForId(id: String) : Book? {
+        return state.value?.books?.find { it.isbn == id }
+    }
+
     fun loadBooks() {
         val service: BookService = getRetrofit().create(BookService::class.java)
 

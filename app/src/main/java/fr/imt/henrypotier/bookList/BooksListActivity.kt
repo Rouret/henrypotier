@@ -82,15 +82,18 @@ class BooksListActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)
-
+        //TODO POUR LE CART ?
+        /*
         /* Inserts book into viewModel. */
         if (requestCode == newBookActivityRequestCode && resultCode == Activity.RESULT_OK) {
             intentData?.let { data ->
-                val bookTitle = data.getStringExtra("BOOK_TITLE") // TODO enlever les ""
-                val bookSynopsis = data.getStringExtra("BOOK_SYNOPSIS") // TODO enlever les ""
+                val bookTitle = data.getStringExtra()
+                val bookSynopsis = data.getStringExtra("BOOK_SYNOPSIS")
 
                 //BooksListViewModel.insertBook(bookTitle, bookSynopsis)
             }
         }
+
+         */
     }
 }
