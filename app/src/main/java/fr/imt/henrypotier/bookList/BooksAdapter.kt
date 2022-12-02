@@ -20,7 +20,8 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
     class BookViewHolder(itemView: View, val onClick: (Book) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
         private val bookImageView: ImageView = itemView.findViewById(R.id.book_image)
-        private val bookTextView: TextView = itemView.findViewById(R.id.book_name)
+        private val bookTextView: TextView = itemView.findViewById(R.id.book_title)
+        private val bookPriceView: TextView = itemView.findViewById(R.id.book_price)
         private var currentBook: Book? = null
 
         init {
@@ -41,6 +42,9 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
             Glide.with(itemView.context)
                 .load(uri)
                 .into(bookImageView)
+
+            bookPriceView.text = "$book.price + €" // TODO
+
         }
     }
 
