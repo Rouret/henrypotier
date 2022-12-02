@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import fr.imt.henrypotier.data.Book
 import fr.imt.henrypotier.R
 
@@ -35,7 +36,11 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
             currentBook = book
 
             bookTextView.text = book.title
-            bookImageView.setImageURI(Uri.parse(book.cover))
+            val cover = book.cover
+            val uri = Uri.parse(cover)
+            Glide.with(itemView.context)
+                .load(uri)
+                .into(bookImageView)
         }
     }
 
