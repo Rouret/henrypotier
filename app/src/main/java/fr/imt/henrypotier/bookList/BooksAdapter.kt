@@ -1,5 +1,6 @@
-package fr.imt.henrypotier
+package fr.imt.henrypotier.bookList
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,17 +9,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-//import com.example.recyclersample.R
-//import com.example.recyclersample.data.Book
+import fr.imt.henrypotier.data.Book
+import fr.imt.henrypotier.R
 
-class BookAdapter(private val onClick: (Book) -> Unit) :
+class BooksAdapter(private val onClick: (Book) -> Unit) :
     ListAdapter<Book, BooksAdapter.BookViewHolder>(BookDiffCallback) {
 
     /* ViewHolder for Book, takes in the inflated view and the onClick behavior. */
     class BookViewHolder(itemView: View, val onClick: (Book) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
-        private val bookTextView: TextView = itemView.findViewById(R.id.Book_text)
-        private val bookImageView: ImageView = itemView.findViewById(R.id.Book_image)
+        private val bookImageView: ImageView = itemView.findViewById(R.id.book_image)
+        private val bookTextView: TextView = itemView.findViewById(R.id.book_name)
         private var currentBook: Book? = null
 
         init {
@@ -29,30 +30,26 @@ class BookAdapter(private val onClick: (Book) -> Unit) :
             }
         }
 
-        /* Bind Book name and image. */
-        fun bind(Book: Book) {
-            currentBook = Book
+        /* Bind book name and image. */
+        fun bind(book: Book) {
+            currentBook = book
 
-            BookTextView.text = Book.name
-            if (Book.image != null) {
-                BookImageView.setImageResource(Book.image)
-            } else {
-                BookImageView.setImageResource(R.drawable.rose)
-            }
+            bookTextView.text = book.title
+            bookImageView.setImageURI(Uri.parse(book.cover))
         }
     }
 
     /* Creates and inflates view and return BookViewHolder. */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.Book_item, parent, false)
+            .inflate(R.layout.book_item, parent, false)
         return BookViewHolder(view, onClick)
     }
 
     /* Gets current Book and uses it to bind view. */
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        val Book = getItem(position)
-        holder.bind(Book)
+        val book = getItem(position)
+        holder.bind(book)
 
     }
 }
@@ -63,6 +60,6 @@ object BookDiffCallback : DiffUtil.ItemCallback<Book>() {
     }
 
     override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.isbn == newItem.isbn
     }
 }

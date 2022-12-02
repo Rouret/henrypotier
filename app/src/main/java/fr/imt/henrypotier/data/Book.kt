@@ -1,4 +1,4 @@
-package fr.imt.henrypotier
+package fr.imt.henrypotier.data
 
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey

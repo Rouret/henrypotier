@@ -1,5 +1,6 @@
 package fr.imt.henrypotier
 
+import fr.imt.henrypotier.data.Book
 import retrofit2.http.GET
 
 interface BookService {
