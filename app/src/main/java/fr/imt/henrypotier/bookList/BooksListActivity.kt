@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
@@ -11,11 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.imt.henrypotier.R
 import fr.imt.henrypotier.bookDetail.BookDetailActivity
 import fr.imt.henrypotier.data.Book
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
 
 const val BOOK_ID = "book id"
 
 class BooksListActivity : AppCompatActivity() {
     private val newBookActivityRequestCode = 1
+    private lateinit var realm: Realm
     private val booksListViewModel by viewModels<BooksListViewModel> {
         BooksListViewModelFactory(this)
     }
@@ -27,7 +31,9 @@ class BooksListActivity : AppCompatActivity() {
         /* Instantiates headerAdapter and BooksAdapter. Both adapters are added to concatAdapter.
         which displays the contents sequentially */
         val booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
-
+        val config = RealmConfiguration.Builder(schema = setOf())
+            .build()
+        this.realm = Realm.open(config)
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.adapter = booksAdapter
 
@@ -37,11 +43,29 @@ class BooksListActivity : AppCompatActivity() {
             }
         }
 
+        booksListViewModel.dataSource.state.observe(this) { state ->
+            Toast.makeText(
+                this@BooksListActivity,
+                "${state.books.size} books | isLoading ${state.isLoading}",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+
+        booksListViewModel.dataSource.loadBooks();
+
         //val fab: View = findViewById(R.id.fab)
         //fab.setOnClickListener {
         //    fabOnClick()
         //}
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.realm.close();
+    }
+
+
 
     /* Opens BookDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnClick(book: Book) {
