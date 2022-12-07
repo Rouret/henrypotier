@@ -39,11 +39,11 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
             bookTextView.text = book.title
             val cover = book.cover
             val uri = Uri.parse(cover)
-            Glide.with(itemView.context)
+            val into = Glide.with(itemView.context)
                 .load(uri)
                 .into(bookImageView)
 
-            bookPriceView.text = "$book.price + €" // TODO
+            bookPriceView.text = book.price.toString() + "€" // TODO
 
         }
     }

@@ -1,33 +1,32 @@
-package fr.imt.henrypotier.bookList
+package fr.imt.henrypotier.basket
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.imt.henrypotier.R
-import fr.imt.henrypotier.basket.BasketActivity
 import fr.imt.henrypotier.bookDetail.BookDetailActivity
+import fr.imt.henrypotier.bookList.BOOK_ID
+import fr.imt.henrypotier.bookList.BasketViewModel
+import fr.imt.henrypotier.bookList.BasketViewModelFactory
+import fr.imt.henrypotier.bookList.BooksAdapter
 import fr.imt.henrypotier.data.Book
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 
-const val BOOK_ID = "book id"
-
-class BooksListActivity : AppCompatActivity() {
+class BasketActivity : AppCompatActivity() {
     private val newBookActivityRequestCode = 1
     private lateinit var realm: Realm
-    private val booksListViewModel by viewModels<BooksListViewModel> {
-        BooksListViewModelFactory(this)
+    private val basketViewModel by viewModels<BasketViewModel> {
+        BasketViewModelFactory(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_library)
+        setContentView(R.layout.activity_basket)
 
         /* Instantiates headerAdapter and BooksAdapter. Both adapters are added to concatAdapter.
         which displays the contents sequentially */
@@ -38,39 +37,27 @@ class BooksListActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.adapter = booksAdapter
 
-        booksListViewModel.booksLiveData.observe(this) {
+        basketViewModel.booksLiveData.observe(this) {
             it?.let {
                 booksAdapter.submitList(it.books)
             }
         }
 
-        booksListViewModel.dataSource.state.observe(this) { state ->
+        basketViewModel.dataSource.state.observe(this) { state ->
             Toast.makeText(
-                this@BooksListActivity,
+                this@BasketActivity,
                 "${state.books.size} books | isLoading ${state.isLoading}",
                 Toast.LENGTH_SHORT
             )
                 .show()
         }
 
-        booksListViewModel.dataSource.loadBooks();
-
-        val basketButton: View = findViewById(R.id.basket_button)
-        basketButton.setOnClickListener {
-            basketButtonOnClick()
-        }
+        basketViewModel.dataSource.loadBooks();
     }
 
     override fun onDestroy() {
         super.onDestroy()
         this.realm.close();
-    }
-
-
-    // onClick on buttton basket go to basket
-    fun basketButtonOnClick() {
-        val intent = Intent(this@BooksListActivity, BasketActivity::class.java)
-        startActivity(intent)
     }
 
     /* Opens BookDetailActivity when RecyclerView item is clicked. */
@@ -79,12 +66,6 @@ class BooksListActivity : AppCompatActivity() {
         intent.putExtra(BOOK_ID, book.isbn)
         startActivity(intent)
     }
-
-    /* Adds book to bookList when FAB is clicked. */
-    //private fun fabOnClick() {
-    //    val intent = Intent(this, AddBookActivity::class.java)
-    //    startActivityForResult(intent, newBookActivityRequestCode)
-    //}
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intentData: Intent?) {
         super.onActivityResult(requestCode, resultCode, intentData)

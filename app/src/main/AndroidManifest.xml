@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".bookDetail.BookDetailActivity" />
+        <activity android:name=".basket.BasketActivity" />
     </application>
 
 </manifest>
