@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import fr.imt.henrypotier.BasketService
+import fr.imt.henrypotier.BookService
 import fr.imt.henrypotier.R
 import fr.imt.henrypotier.basket.BasketActivity
 import fr.imt.henrypotier.bookDetail.BookDetailActivity
@@ -72,7 +73,7 @@ class BooksListActivity : AppCompatActivity() {
             }
                 booksAdapter.submitList(it.books)
             }
-        }
+
 
         booksListViewModel.dataSource.state.observe(this) { state ->
             Toast.makeText(
