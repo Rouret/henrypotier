@@ -40,16 +40,6 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
         fun bind(book: Book) {
             currentBook = book
 
-            basketButton.setOnClickListener {
-                BasketService.addBooksToBasket(itemView.context, book)
-                Toast.makeText(
-                    this.itemView.context,
-                    "${book.title} added.",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            }
-
             bookTextView.text = book.title
             val cover = book.cover
             val uri = Uri.parse(cover)
@@ -58,6 +48,22 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
                 .into(bookImageView)
 
             bookPriceView.text = book.price.toString() + "€" // TODO
+
+            if(book.isInBasket){
+                basketButton.text = "-"
+                basketButton.setOnClickListener {
+                    BasketService.removeBookToBasket(itemView.context, book)
+                    book.isInBasket = false
+                }
+            } else {
+                basketButton.text = "+"
+                basketButton.setOnClickListener {
+                    book.isInBasket = true
+                    BasketService.addBooksToBasket(itemView.context, book)
+                    bindingAdapter?.notifyDataSetChanged()
+                }
+            }
+
         }
     }
 

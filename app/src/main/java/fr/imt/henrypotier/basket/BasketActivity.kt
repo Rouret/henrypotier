@@ -13,12 +13,12 @@ import fr.imt.henrypotier.data.Book
 
 class BasketActivity : AppCompatActivity() {
 
-
+    private lateinit var booksAdapter: BooksAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
 
-        val booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
+        booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
 
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.adapter = booksAdapter
@@ -28,6 +28,11 @@ class BasketActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        booksAdapter.notifyDataSetChanged();
+    }
     /* Opens BookDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnClick(book: Book) {
         val intent = Intent(this, BookDetailActivity()::class.java)

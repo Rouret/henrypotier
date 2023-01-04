@@ -18,13 +18,31 @@ class BasketService {
         }
         fun addBooksToBasket(context:Context, book: Book) {
             getAllBooksInBasket(context).let {
-                if(!it.contains(book)){
+                if(!it.any { b -> b.isbn == book.isbn }){
+                    book.isInBasket = true
                     var newListOfBooks = it.plus(book)
-                    context.getSharedPreferences(sharedPreferencesName, PRIVATE_MODE)
-                        .edit()
-                        .putString(valueName, Gson().toJson(newListOfBooks))
-                        .apply()
+                    update(context,newListOfBooks)
                 }
+            }
+        }
+        fun removeBookToBasket(context: Context, book: Book){
+            getAllBooksInBasket(context).let {
+                if(it.any { b -> b.isbn == book.isbn }){
+                    //it remove book to the list
+                    var newListOfBooks = it.filter { b -> b.isbn != book.isbn }
+                    update(context,newListOfBooks)
+                }
+            }
+        }
+        fun update(context: Context,newListOfBooks: List<Book>){
+            context.getSharedPreferences(sharedPreferencesName, PRIVATE_MODE)
+                .edit()
+                .putString(valueName, Gson().toJson(newListOfBooks))
+                .apply()
+        }
+        fun isBookIsInBasket(context: Context,bookToCheck : Book): Boolean {
+            getAllBooksInBasket(context).let {
+               return it.find { b -> b.isbn == bookToCheck.isbn } != null
             }
         }
     }

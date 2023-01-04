@@ -6,5 +6,6 @@ open class Book(
     var title: String = "",
     var price: Int = 0,
     var cover: String = "",
-    var synopsis: List<String> = listOf()
+    var synopsis: List<String> = listOf(),
+    var isInBasket : Boolean = false
 )
