@@ -4,12 +4,15 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fr.imt.henrypotier.BasketService
 import fr.imt.henrypotier.data.Book
 import fr.imt.henrypotier.R
 
@@ -22,6 +25,7 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
         private val bookImageView: ImageView = itemView.findViewById(R.id.book_image)
         private val bookTextView: TextView = itemView.findViewById(R.id.book_title)
         private val bookPriceView: TextView = itemView.findViewById(R.id.book_price)
+        private val basketButton : Button = itemView.findViewById(R.id.item_basket_button)
         private var currentBook: Book? = null
 
         init {
@@ -36,15 +40,24 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
         fun bind(book: Book) {
             currentBook = book
 
+            basketButton.setOnClickListener {
+                BasketService.addBooksToBasket(itemView.context, book)
+                Toast.makeText(
+                    this.itemView.context,
+                    "${book.title} added.",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+
             bookTextView.text = book.title
             val cover = book.cover
             val uri = Uri.parse(cover)
-            val into = Glide.with(itemView.context)
+            Glide.with(itemView.context)
                 .load(uri)
                 .into(bookImageView)
 
             bookPriceView.text = book.price.toString() + "€" // TODO
-
         }
     }
 

@@ -8,23 +8,6 @@ import fr.imt.henrypotier.BookViewModel
 class BooksListViewModel(val dataSource: BookViewModel) : ViewModel() {
 
     val booksLiveData = dataSource.getBookList()
-
-    /* If the name and description are present, create new Book and add it to the datasource */
-    fun insertBook(flowerName: String?, flowerDescription: String?) {
-        //if (flowerName == null || flowerDescription == null) {
-        //    return
-        //}
-//
-        //val image = dataSource.getRandomBookImageAsset()
-        //val newBook = Book(
-        //    Random.nextLong(),
-        //    flowerName,
-        //    image,
-        //    flowerDescription
-        //)
-//
-        //dataSource.addBook(newBook)
-    }
 }
 
 class BooksListViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
