@@ -28,23 +28,6 @@ class BooksListActivity : AppCompatActivity() {
     private val booksListViewModel by viewModels<BooksListViewModel> {
         BooksListViewModelFactory(this)
     }
-    private var percentagePromo = Int.MAX_VALUE;
-    private var minusPromo = Int.MAX_VALUE;
-    private var slicePromo = Int.MAX_VALUE;
-    private val listISBN = ArrayList<String>()
-    private val listPrice = ArrayList<Int>()
-    private val urlPromoStart = "https://henri-potier.techx.fr/books/"
-    private val urlPromoEnd = "/commercialOffers"
-    private var commercialOffers = ArrayList<CommercialOffer>()
-    private var discount: CommercialOffer? = null
-    private var total: Double = 0.0
-
-    private fun getRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://henri-potier.techx.fr")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,23 +65,6 @@ class BooksListActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             )
                 .show()
-
-            println("Liste de livres")
-            println(state.books)
-            for (book in state.books) {
-                listISBN.add(book.isbn)
-                listPrice.add(book.price)
-            }
-            // keep only 3 first books
-            if (listISBN.size > 3) {
-                listISBN.subList(3, listISBN.size).clear()
-                listPrice.subList(3, listPrice.size).clear()
-            }
-
-            testAffichage()
-            runBlocking {
-                calculateTotal()
-            }
         }
 
         booksListViewModel.dataSource.loadBooks()
@@ -114,49 +80,14 @@ class BooksListActivity : AppCompatActivity() {
         booksListViewModel.dataSource.loadBooks()
     }
 
-    private fun testAffichage() {
-        println("Liste d'ISBN")
-        println(listISBN)
-        println("Liste de prix")
-        println(listPrice)
-        val urlPromo = urlPromoStart + listISBN.joinToString(separator = ",") + urlPromoEnd
-        println("URL promo")
-        println(urlPromo)
-    }
-
-    private suspend fun calculateTotal() {
-        // total in listprice
-        for (price in listPrice) {
-            total += price
-        }
-
-        if (listISBN.size >= 3) {
-            val retrofit = getRetrofit()
-            val service = retrofit.create(BookService::class.java)
-            println("Liste d'ISBN AAAAAA")
-            println(listISBN)
-            val commercialOffersRequest =
-                service.getCommercialOffers(listISBN.joinToString(","))
-            println("CommercialOffersRequest")
-            println(commercialOffersRequest)
-                    val allOffers = commercialOffersRequest.offers
-                    println("All offers")
-                    println(allOffers)
-                    discount = CommercialOffer.bestOffer(allOffers, total)
-                    println("Réduction")
-                    println(discount)
-                    println("Total")
-                    println(total)
-        }
-    }
 
     override fun onDestroy() {
         super.onDestroy()
     }
 
 
-    // onClick on buttton basket go to basket
-    fun basketButtonOnClick() {
+    // onClick on button basket go to basket
+    private fun basketButtonOnClick() {
         val intent = Intent(this@BooksListActivity, BasketActivity::class.java)
         startActivity(intent)
     }
