@@ -2,6 +2,8 @@ package fr.imt.henrypotier.basket
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import fr.imt.henrypotier.BasketService
@@ -98,6 +100,13 @@ class BasketActivity : AppCompatActivity() {
         totalAfterDiscount = totalBeforeDiscount - discount!!.value
         println("totalAfterDiscount")
         println(totalAfterDiscount)
+
+        val totalBeforeDiscountView: TextView = findViewById(R.id.basket_total_before_discount)
+        totalBeforeDiscountView.text = String.format(getString(R.string.basket_total_before_discount), totalBeforeDiscount.toString())
+        val totalAfterDiscountView: TextView = findViewById(R.id.basket_total_after_discount)
+        totalAfterDiscountView.text = String.format(getString(R.string.basket_total_after_discount), totalAfterDiscount.toString())
+        val discountView: TextView = findViewById(R.id.basket_discount)
+        discountView.text = String.format(getString(R.string.basket_discount), discount!!.value.toString())
     }
 
 
