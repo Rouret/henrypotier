@@ -1,6 +1,5 @@
-package fr.imt.henrypotier;
+package fr.imt.henrypotier
 
-import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

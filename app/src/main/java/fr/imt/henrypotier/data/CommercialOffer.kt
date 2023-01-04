@@ -5,9 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class CommercialOffer(
-    val type: CommercialOfferType,
-    val value: Int,
-    val sliceValue: Int = 0
+    val type: CommercialOfferType, val value: Int, val sliceValue: Int = 0
 ) : Parcelable {
 
     fun calculateDiscount(total: Double): Double {
@@ -15,7 +13,6 @@ data class CommercialOffer(
             CommercialOfferType.PERCENTAGE -> total * ((100.0 - value.toDouble()) / 100.0)
             CommercialOfferType.MINUS -> total - value
             CommercialOfferType.SLICE -> total - (total / sliceValue).toInt() * value
-            else -> total
         }
     }
 
@@ -24,16 +21,15 @@ data class CommercialOffer(
             CommercialOfferType.PERCENTAGE -> "$value% reduction"
             CommercialOfferType.MINUS -> "Reduction of $value€"
             CommercialOfferType.SLICE -> "Pay $value€ less every $sliceValue€"
-            else -> "No discount"
         }
     }
 
     companion object {
         fun bestOffer(offers: List<CommercialOffer>?, total: Double): CommercialOffer? {
-            if (offers != null) {
-                return offers.minByOrNull { offer -> offer.calculateDiscount(total = total) }
+            return if (offers != null) {
+                offers.minByOrNull { offer -> offer.calculateDiscount(total = total) }
             } else {
-                return CommercialOffer(CommercialOfferType.MINUS, 0, 0)
+                CommercialOffer(CommercialOfferType.MINUS, 0, 0)
             }
 
         }

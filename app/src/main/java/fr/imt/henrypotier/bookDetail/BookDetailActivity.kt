@@ -14,25 +14,25 @@ import fr.imt.henrypotier.data.Book
 class BookDetailActivity : AppCompatActivity() {
 
     private val bookDetailViewModel by viewModels<BookDetailViewModel> {
-        BookDetailViewModelFactory(this)
+        BookDetailViewModelFactory()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_detail)
 
-        var currentBookId: String? = null
+        var currentBookId: String?
 
         //get the book id from the intent
         val intent = intent
-        if (!intent.hasExtra(BOOK_ID)){
+        if (!intent.hasExtra(BOOK_ID)) {
             finish()
         }
 
         currentBookId = intent.getStringExtra(BOOK_ID)
 
         //get the book from the view model
-        val book : Book? = currentBookId?.let { bookDetailViewModel.getBookForId(it) }
+        val book: Book? = currentBookId?.let { bookDetailViewModel.getBookForId(it) }
 
 
         /* Connect variables to UI elements. */
@@ -51,12 +51,7 @@ class BookDetailActivity : AppCompatActivity() {
         bookName.text = book?.title
         bookDescription.text = book?.synopsis?.joinToString(separator = "") { it }
         bookPrice.text = book?.price.toString()
-        Glide.with(this)
-            .load(book?.cover)
-            .into(bookImage)
-
-
-
+        Glide.with(this).load(book?.cover).into(bookImage)
 
 
         /* If currentBookId is not null, get corresponding book and set name, image and

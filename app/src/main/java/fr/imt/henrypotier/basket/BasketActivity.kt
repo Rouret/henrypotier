@@ -2,7 +2,6 @@ package fr.imt.henrypotier.basket
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -49,7 +48,7 @@ class BasketActivity : AppCompatActivity() {
             }
 
             testAffichage()
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 runBlocking {
                     calculateTotal()
                 }
@@ -58,10 +57,8 @@ class BasketActivity : AppCompatActivity() {
     }
 
     private fun getRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://henri-potier.techx.fr")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        return Retrofit.Builder().baseUrl("https://henri-potier.techx.fr")
+            .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
     private fun testAffichage() {
@@ -85,8 +82,7 @@ class BasketActivity : AppCompatActivity() {
         val service = retrofit.create(BookService::class.java)
         println("Liste d'ISBN AAAAAA")
         println(listISBN)
-        val commercialOffersRequest =
-            service.getCommercialOffers(listISBN.joinToString(","))
+        val commercialOffersRequest = service.getCommercialOffers(listISBN.joinToString(","))
         println("CommercialOffersRequest")
         println(commercialOffersRequest)
         val allOffers = commercialOffersRequest.offers
@@ -102,17 +98,22 @@ class BasketActivity : AppCompatActivity() {
         println(totalAfterDiscount)
 
         val totalBeforeDiscountView: TextView = findViewById(R.id.basket_total_before_discount)
-        totalBeforeDiscountView.text = String.format(getString(R.string.basket_total_before_discount), totalBeforeDiscount.toString())
+        totalBeforeDiscountView.text = String.format(
+            getString(R.string.basket_total_before_discount), totalBeforeDiscount.toString()
+        )
         val totalAfterDiscountView: TextView = findViewById(R.id.basket_total_after_discount)
-        totalAfterDiscountView.text = String.format(getString(R.string.basket_total_after_discount), totalAfterDiscount.toString())
+        totalAfterDiscountView.text = String.format(
+            getString(R.string.basket_total_after_discount), totalAfterDiscount.toString()
+        )
         val discountView: TextView = findViewById(R.id.basket_discount)
-        discountView.text = String.format(getString(R.string.basket_discount), discount!!.value.toString())
+        discountView.text =
+            String.format(getString(R.string.basket_discount), discount!!.value.toString())
     }
 
 
     override fun onResume() {
         super.onResume()
-        booksAdapter.notifyDataSetChanged();
+        booksAdapter.notifyDataSetChanged()
     }
 
     /* Opens BookDetailActivity when RecyclerView item is clicked. */

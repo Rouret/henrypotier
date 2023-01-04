@@ -8,15 +8,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import fr.imt.henrypotier.BasketService
-import fr.imt.henrypotier.BookService
 import fr.imt.henrypotier.R
 import fr.imt.henrypotier.basket.BasketActivity
 import fr.imt.henrypotier.bookDetail.BookDetailActivity
 import fr.imt.henrypotier.data.Book
-import fr.imt.henrypotier.data.CommercialOffer
-import kotlinx.coroutines.runBlocking
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 const val BOOK_ID = "book id"
@@ -26,7 +21,7 @@ class BooksListActivity : AppCompatActivity() {
     private lateinit var booksAdapter: BooksAdapter
 
     private val booksListViewModel by viewModels<BooksListViewModel> {
-        BooksListViewModelFactory(this)
+        BooksListViewModelFactory()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,26 +31,25 @@ class BooksListActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.adapter = booksAdapter
 
-        BasketService.update(this, ArrayList<Book>())
+        BasketService.update(this, ArrayList())
 
-        booksListViewModel.booksLiveData.observe(this) {
-            it?.let {
-                if(!it.isLoading && it.books.isNotEmpty() && booksAdapter.currentList != it.books){
-                    var basket = BasketService.getAllBooksInBasket(this);
-                    //filter the cart
-                    var newCart = basket.filter { book -> !it.books.contains(book) }
-                    if(newCart.size != basket.size){
-                        BasketService.update(this, newCart)
-                    }
-                    it.books.map {
-                        it.isInBasket = newCart.find { book -> book.isbn == it.isbn } != null
-                    }
-                    //filter the result
-                    booksAdapter.submitList(it.books)
+        booksListViewModel.booksLiveData.observe(this) { it ->
+            if (!it.isLoading && it.books.isNotEmpty() && booksAdapter.currentList != it.books) {
+                val basket = BasketService.getAllBooksInBasket(this)
+                //filter the cart
+                val newCart = basket.filter { book -> !it.books.contains(book) }
+                if (newCart.size != basket.size) {
+                    BasketService.update(this, newCart)
                 }
-            }
+                it.books.map {
+                    it.isInBasket = newCart.find { book -> book.isbn == it.isbn } != null
+                }
+                //filter the result
                 booksAdapter.submitList(it.books)
             }
+
+            booksAdapter.submitList(it.books)
+        }
 
 
         booksListViewModel.dataSource.state.observe(this) { state ->
@@ -63,8 +57,7 @@ class BooksListActivity : AppCompatActivity() {
                 this@BooksListActivity,
                 "${state.books.size} books | isLoading ${state.isLoading}",
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
         }
 
         booksListViewModel.dataSource.loadBooks()
@@ -79,12 +72,6 @@ class BooksListActivity : AppCompatActivity() {
         super.onResume()
         booksListViewModel.dataSource.loadBooks()
     }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
 
     // onClick on button basket go to basket
     private fun basketButtonOnClick() {

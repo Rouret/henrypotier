@@ -6,7 +6,7 @@ class Book {
     var price: Int = 0
     var cover: String = ""
     var synopsis: List<String> = listOf()
-    var isInBasket : Boolean = false
+    var isInBasket: Boolean = false
 
     override fun toString(): String {
         return "Book(isbn='$isbn', title='$title', price=$price, cover='$cover', synopsis=$synopsis)"

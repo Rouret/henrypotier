@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +24,7 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
         private val bookImageView: ImageView = itemView.findViewById(R.id.book_image)
         private val bookTextView: TextView = itemView.findViewById(R.id.book_title)
         private val bookPriceView: TextView = itemView.findViewById(R.id.book_price)
-        private val basketButton : Button = itemView.findViewById(R.id.item_basket_button)
+        private val basketButton: Button = itemView.findViewById(R.id.item_basket_button)
         private var currentBook: Book? = null
 
         init {
@@ -43,13 +42,11 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
             bookTextView.text = book.title
             val cover = book.cover
             val uri = Uri.parse(cover)
-            Glide.with(itemView.context)
-                .load(uri)
-                .into(bookImageView)
+            Glide.with(itemView.context).load(uri).into(bookImageView)
 
-            bookPriceView.text = book.price.toString() + "€" // TODO
+            bookPriceView.text = String.format(book.price.toString() + "€")
 
-            if(book.isInBasket){
+            if (book.isInBasket) {
                 basketButton.text = "-"
                 basketButton.setOnClickListener {
                     BasketService.removeBookToBasket(itemView.context, book)
@@ -69,8 +66,7 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
 
     /* Creates and inflates view and return BookViewHolder. */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.book_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.book_item, parent, false)
         return BookViewHolder(view, onClick)
     }
 

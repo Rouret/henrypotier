@@ -31,8 +31,7 @@ class BasketViewModelFactory(private val context: Context) : ViewModelProvider.F
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(BasketViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return BasketViewModel(
+            @Suppress("UNCHECKED_CAST") return BasketViewModel(
                 dataSource = BookViewModel.getDataSource()
             ) as T
         }
