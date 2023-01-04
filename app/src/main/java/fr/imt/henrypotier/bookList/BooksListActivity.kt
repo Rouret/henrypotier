@@ -1,20 +1,34 @@
 package fr.imt.henrypotier.bookList
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ConcatAdapter
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
+import fr.imt.henrypotier.BookService
+import fr.imt.henrypotier.BookState
 import fr.imt.henrypotier.R
 import fr.imt.henrypotier.basket.BasketActivity
 import fr.imt.henrypotier.bookDetail.BookDetailActivity
 import fr.imt.henrypotier.data.Book
+import fr.imt.henrypotier.data.CommercialOffer
+import fr.imt.henrypotier.data.CommercialOfferType
+import fr.imt.henrypotier.data.CommercialOffers
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 const val BOOK_ID = "book id"
 
@@ -23,6 +37,23 @@ class BooksListActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private val booksListViewModel by viewModels<BooksListViewModel> {
         BooksListViewModelFactory(this)
+    }
+    private var percentagePromo = Int.MAX_VALUE;
+    private var minusPromo = Int.MAX_VALUE;
+    private var slicePromo = Int.MAX_VALUE;
+    private val listISBN = ArrayList<String>()
+    private val listPrice = ArrayList<Int>()
+    private val urlPromoStart = "https://henri-potier.techx.fr/books/"
+    private val urlPromoEnd = "/commercialOffers"
+    private var commercialOffers = ArrayList<CommercialOffer>()
+    private var discount: CommercialOffer? = null
+    private var total: Double = 0.0
+
+    private fun getRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://henri-potier.techx.fr")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,13 +82,67 @@ class BooksListActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             )
                 .show()
+
+            println("Liste de livres")
+            println(state.books)
+            for (book in state.books) {
+                listISBN.add(book.isbn)
+                listPrice.add(book.price)
+            }
+            // keep only 3 first books
+            if (listISBN.size > 3) {
+                listISBN.subList(3, listISBN.size).clear()
+                listPrice.subList(3, listPrice.size).clear()
+            }
+
+            testAffichage()
+            runBlocking {
+                calculateTotal()
+            }
+
         }
 
-        booksListViewModel.dataSource.loadBooks();
+        booksListViewModel.dataSource.loadBooks()
 
         val basketButton: View = findViewById(R.id.basket_button)
         basketButton.setOnClickListener {
             basketButtonOnClick()
+        }
+    }
+
+    private fun testAffichage() {
+        println("Liste d'ISBN")
+        println(listISBN)
+        println("Liste de prix")
+        println(listPrice)
+        val urlPromo = urlPromoStart + listISBN.joinToString(separator = ",") + urlPromoEnd
+        println("URL promo")
+        println(urlPromo)
+    }
+
+    private suspend fun calculateTotal() {
+        // total in listprice
+        for (price in listPrice) {
+            total += price
+        }
+
+        if (listISBN.size >= 3) {
+            val retrofit = getRetrofit()
+            val service = retrofit.create(BookService::class.java)
+            println("Liste d'ISBN AAAAAA")
+            println(listISBN)
+            val commercialOffersRequest =
+                service.getCommercialOffers(listISBN.joinToString(","))
+            println("CommercialOffersRequest")
+            println(commercialOffersRequest)
+                    val allOffers = commercialOffersRequest.offers
+                    println("All offers")
+                    println(allOffers)
+                    discount = CommercialOffer.bestOffer(allOffers, total)
+                    println("Réduction")
+                    println(discount)
+                    println("Total")
+                    println(total)
         }
     }
 
