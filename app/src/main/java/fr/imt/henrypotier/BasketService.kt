@@ -3,6 +3,9 @@ package fr.imt.henrypotier
 import android.content.Context
 import com.google.gson.Gson
 import fr.imt.henrypotier.data.Book
+import fr.imt.henrypotier.data.CommercialOffer
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class BasketService {
@@ -47,6 +50,38 @@ class BasketService {
             getAllBooksInBasket(context).let {
                 return it.find { b -> b.isbn == bookToCheck.isbn } != null
             }
+        }
+
+        fun getTotalPrice(context: Context): Double {
+            var totalPrice = 0.0
+            getAllBooksInBasket(context).forEach { book ->
+                totalPrice += book.price
+            }
+            return totalPrice
+        }
+
+        private fun getISBNs(context: Context): List<String> {
+            val listISBN = mutableListOf<String>()
+            getAllBooksInBasket(context).forEach { book ->
+                listISBN.add(book.isbn)
+            }
+            return listISBN
+        }
+
+        private fun getISBNsAsString(context: Context): String {
+            return getISBNs(context).joinToString(",")
+        }
+
+        suspend fun getCommercialOffers(context: Context): List<CommercialOffer> {
+            val retrofit = getRetrofit()
+            val service = retrofit.create(BookService::class.java)
+            val commercialOffersRequest = service.getCommercialOffers(getISBNsAsString(context))
+            return commercialOffersRequest.offers
+        }
+
+        private fun getRetrofit(): Retrofit {
+            return Retrofit.Builder().baseUrl("https://henri-potier.techx.fr")
+                .addConverterFactory(GsonConverterFactory.create()).build()
         }
     }
 
