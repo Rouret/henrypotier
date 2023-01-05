@@ -6,6 +6,7 @@
     <string name="basket_total_before_discount">Total avant réduction : %1$s €</string>
     <string name="basket_discount">Réduction : %1$s €</string>
     <string name="basket_total_after_discount">Total après réduction : %1$s €</string>
+    <string name="basket_empty">Votre panier est vide</string>
 
 
     <string name="add_flower">Add Flower</string>

@@ -108,6 +108,9 @@ class BasketActivity : AppCompatActivity() {
         val discountView: TextView = findViewById(R.id.basket_discount)
         discountView.text =
             String.format(getString(R.string.basket_discount), discount!!.value.toString())
+
+        val basketEmptyView: TextView = findViewById(R.id.basket_empty)
+        basketEmptyView.text = ""
     }
 
 
