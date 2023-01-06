@@ -19,6 +19,9 @@ const val BOOK_ID = "book id"
 class BooksListActivity : AppCompatActivity() {
 
     private lateinit var booksAdapter: BooksAdapter
+    private lateinit var booksAdapterLeft: BooksAdapter
+    private lateinit var booksAdapterRight: BooksAdapter
+    private val isPortrait: Boolean by lazy { resources.getBoolean(R.bool.is_portrait) }
 
     private val booksListViewModel by viewModels<BooksListViewModel> {
         BooksListViewModelFactory()
@@ -28,8 +31,19 @@ class BooksListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
-        recyclerView.adapter = booksAdapter
+        booksAdapterLeft = BooksAdapter { book -> adapterOnClick(book) }
+        booksAdapterRight = BooksAdapter { book -> adapterOnClick(book) }
+        if(isPortrait) {
+            val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+            recyclerView.adapter = booksAdapter
+        } else {
+            // put half of the books in the left recycler view
+            val recyclerViewLeft: RecyclerView = findViewById(R.id.recycler_view_left)
+            recyclerViewLeft.adapter = booksAdapterLeft
+            // put the other half in the right recycler view
+            val recyclerViewRight: RecyclerView = findViewById(R.id.recycler_view_right)
+            recyclerViewRight.adapter = booksAdapterRight
+        }
 
         BasketService.update(this, ArrayList())
 
@@ -44,8 +58,16 @@ class BooksListActivity : AppCompatActivity() {
                 it.books.map {
                     it.isInBasket = newCart.find { book -> book.isbn == it.isbn } != null
                 }
-                //filter the result
-                booksAdapter.submitList(it.books)
+
+                if(!isPortrait) {
+                    // split the list in two
+                    // half arrondi au supeieur
+                    val half = (it.books.size + 1) / 2
+                    booksAdapterRight.submitList(it.books.subList(half, it.books.size))
+                    booksAdapterLeft.submitList(it.books.subList(0, half))
+                } else {
+                    booksAdapter.submitList(it.books)
+                }
             }
 
             booksAdapter.submitList(it.books)
