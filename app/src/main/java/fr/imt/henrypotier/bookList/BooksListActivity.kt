@@ -33,6 +33,7 @@ class BooksListActivity : AppCompatActivity() {
 
         BasketService.update(this, ArrayList())
 
+        //TODO lorsqu'on a la liste des livres on check ce qui sont déjà dans le panier et leur quantité
         booksListViewModel.booksLiveData.observe(this) { it ->
             if (!it.isLoading && it.books.isNotEmpty() && booksAdapter.currentList != it.books) {
                 val basket = BasketService.getAllBooksInBasket(this)
@@ -51,7 +52,7 @@ class BooksListActivity : AppCompatActivity() {
             booksAdapter.submitList(it.books)
         }
 
-
+        //TODO circular progress ?
         booksListViewModel.dataSource.state.observe(this) { state ->
             Toast.makeText(
                 this@BooksListActivity,
@@ -70,6 +71,7 @@ class BooksListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        //TODO changer dynmaiquement la valeur des livres
         booksListViewModel.dataSource.loadBooks()
     }
 

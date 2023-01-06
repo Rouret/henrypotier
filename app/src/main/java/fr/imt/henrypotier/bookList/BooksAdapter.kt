@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.imt.henrypotier.BasketService
-import fr.imt.henrypotier.data.Book
 import fr.imt.henrypotier.R
+import fr.imt.henrypotier.data.Book
 
 class BooksAdapter(private val onClick: (Book) -> Unit) :
     ListAdapter<Book, BooksAdapter.BookViewHolder>(BookDiffCallback) {
@@ -26,7 +26,7 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
         private val bookPriceView: TextView = itemView.findViewById(R.id.book_price)
         private val basketButton: Button = itemView.findViewById(R.id.item_basket_button)
         private var currentBook: Book? = null
-
+        //TODO Modifier pour avoir la ligne "x dans le panier" si le livre est déjà dans le panier
         init {
             itemView.setOnClickListener {
                 currentBook?.let {

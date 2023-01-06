@@ -22,6 +22,8 @@ class BasketActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
 
+        //TODO Changer d'adaptateur
+        //TODO Créer un cart_bookl_item.xml
         booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
 
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
