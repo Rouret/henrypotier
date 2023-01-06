@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import fr.imt.henrypotier.BasketService
 import fr.imt.henrypotier.R
 import fr.imt.henrypotier.bookList.BOOK_ID
 import fr.imt.henrypotier.data.Book
@@ -52,23 +54,20 @@ class BookDetailActivity : AppCompatActivity() {
         bookDescription.text = book?.synopsis?.joinToString(separator = "") { it }
         bookPrice.text = String.format(book?.price.toString() + "€")
         Glide.with(this).load(book?.cover).into(bookImage)
+        addToCartButton.setOnClickListener {
+            if (book != null) {
+                BasketService.addBooksToBasket(context = this, book)
+                Toast.makeText(
+                    this@BookDetailActivity,
+                    "Ajouté au panier",
+                    Toast.LENGTH_SHORT
+                ).show()
+            };
+        }
 
 
-        /* If currentBookId is not null, get corresponding book and set name, image and
-        description */
-        //currentBookId?.let {
-        //    val currentBook = bookDetailViewModel.getBookForId(it)
-        //    bookName.text = currentBook?.name
-        //    bookImage.setImageResource(currentBook.image)
-        //    bookDescription.text = currentBook?.description
-//
-        //    removeBookButton.setOnClickListener {
-        //        if (currentBook != null) {
-        //            bookDetailViewModel.removeBook(currentBook)
-        //        }
-        //        finish()
-        //    }
-        //}
+
+
 
     }
 }

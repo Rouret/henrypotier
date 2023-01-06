@@ -50,7 +50,7 @@ class BasketBooksAdapter(private val onClick: (BasketBook) -> Unit) :
             quantitiesTextView.text = book.quantity.toString()
 
             addQuantitiesButton.setOnClickListener {
-                BasketService.addQuantityToBasketBook(itemView.context, book);
+                BasketService.addBooksToBasket(itemView.context, book);
                 book.quantity += 1
                 quantitiesTextView.text = book.quantity.toString()
                 bindingAdapter?.notifyDataSetChanged()
