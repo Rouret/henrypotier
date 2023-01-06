@@ -9,33 +9,41 @@ import fr.imt.henrypotier.BasketService
 import fr.imt.henrypotier.R
 import fr.imt.henrypotier.bookDetail.BookDetailActivity
 import fr.imt.henrypotier.bookList.BOOK_ID
-import fr.imt.henrypotier.bookList.BooksAdapter
-import fr.imt.henrypotier.data.Book
+import fr.imt.henrypotier.data.BasketBook
 import fr.imt.henrypotier.data.CommercialOffer
 import kotlinx.coroutines.runBlocking
 
 class BasketActivity : AppCompatActivity() {
 
-    private lateinit var booksAdapter: BooksAdapter
+    private lateinit var booksAdapter: BasketBooksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
 
-        booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
+        booksAdapter = BasketBooksAdapter { basketBook -> adapterOnClick(basketBook) }
 
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.basket_recycler_view)
         recyclerView.adapter = booksAdapter
 
         BasketService.getAllBooksInBasket(this).let {
             booksAdapter.submitList(it)
-
             if (it.isNotEmpty()) {
                 runBlocking {
                     calculateTotal()
                 }
             }
         }
+
+        //run calculate total when list change froma dap )
+        booksAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                runBlocking {
+                    calculateTotal()
+                }
+            }
+        })
+
     }
 
     private suspend fun calculateTotal() {
@@ -54,9 +62,9 @@ class BasketActivity : AppCompatActivity() {
     }
 
     /* Opens BookDetailActivity when RecyclerView item is clicked. */
-    private fun adapterOnClick(book: Book) {
+    private fun adapterOnClick(basketBook: BasketBook) {
         val intent = Intent(this, BookDetailActivity()::class.java)
-        intent.putExtra(BOOK_ID, book.isbn)
+        intent.putExtra(BOOK_ID, basketBook.isbn)
         startActivity(intent)
     }
 

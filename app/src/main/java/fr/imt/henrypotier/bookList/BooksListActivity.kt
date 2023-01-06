@@ -45,7 +45,7 @@ class BooksListActivity : AppCompatActivity() {
             recyclerViewRight.adapter = booksAdapterRight
         }
 
-        BasketService.update(this, ArrayList())
+        BasketService.saveBooksInBasket(this, ArrayList())
 
         booksListViewModel.booksLiveData.observe(this) { it ->
             if (!it.isLoading && it.books.isNotEmpty() && booksAdapter.currentList != it.books) {
@@ -53,10 +53,7 @@ class BooksListActivity : AppCompatActivity() {
                 //filter the cart
                 val newCart = basket.filter { book -> !it.books.contains(book) }
                 if (newCart.size != basket.size) {
-                    BasketService.update(this, newCart)
-                }
-                it.books.map {
-                    it.isInBasket = newCart.find { book -> book.isbn == it.isbn } != null
+                    BasketService.saveBooksInBasket(this, newCart)
                 }
 
                 if(!isPortrait) {
@@ -69,17 +66,16 @@ class BooksListActivity : AppCompatActivity() {
                     booksAdapter.submitList(it.books)
                 }
             }
-
-            booksAdapter.submitList(it.books)
         }
 
-
         booksListViewModel.dataSource.state.observe(this) { state ->
-            Toast.makeText(
-                this@BooksListActivity,
-                "${state.books.size} books | isLoading ${state.isLoading}",
-                Toast.LENGTH_SHORT
-            ).show()
+            if(state.isLoading){
+                Toast.makeText(
+                    this@BooksListActivity,
+                    "Chargement ...",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         booksListViewModel.dataSource.loadBooks()
@@ -92,7 +88,7 @@ class BooksListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        booksListViewModel.dataSource.loadBooks()
+        booksAdapter.notifyDataSetChanged()
     }
 
     // onClick on button basket go to basket

@@ -3,6 +3,7 @@ package fr.imt.henrypotier
 import android.content.Context
 import com.google.gson.Gson
 import fr.imt.henrypotier.data.Book
+import fr.imt.henrypotier.data.BasketBook
 import fr.imt.henrypotier.data.CommercialOffer
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,19 +15,45 @@ class BasketService {
         private var sharedPreferencesName = "basket"
         private var valueName = "cart"
         private var PRIVATE_MODE = 0
-        fun getAllBooksInBasket(context: Context): List<Book> {
+
+        fun getAllBooksInBasket(context: Context): List<BasketBook> {
             val serializedObjects =
                 context.getSharedPreferences(sharedPreferencesName, PRIVATE_MODE)
                     .getString(valueName, "[]")
-            return Gson().fromJson(serializedObjects, Array<Book>::class.java).toList()
+            return Gson().fromJson(serializedObjects, Array<BasketBook>::class.java).toList()
         }
 
         fun addBooksToBasket(context: Context, book: Book) {
             getAllBooksInBasket(context).let {
-                if (!it.any { b -> b.isbn == book.isbn }) {
-                    book.isInBasket = true
-                    val newListOfBooks = it.plus(book)
-                    update(context, newListOfBooks)
+                val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
+                if (cartBook != null) {
+                    cartBook.quantity += 1
+                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    saveBooksInBasket(context,  cart.plus(cartBook))
+                } else {
+                    saveBooksInBasket(context, it.plus(book.factoryCartBook()))
+                }
+            }
+        }
+
+        fun addQuantityToBasketBook(context: Context, book: BasketBook) {
+            getAllBooksInBasket(context).let {
+                val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
+                if (cartBook != null) {
+                    cartBook.quantity += 1
+                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    saveBooksInBasket(context,  cart.plus(cartBook))
+                }
+            }
+        }
+
+        fun removeQuantityToBasketBook(context: Context, book: BasketBook) {
+            getAllBooksInBasket(context).let {
+                val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
+                if (cartBook != null) {
+                    cartBook.quantity -= 1
+                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    saveBooksInBasket(context,  cart.plus(cartBook))
                 }
             }
         }
@@ -36,26 +63,26 @@ class BasketService {
                 if (it.any { b -> b.isbn == book.isbn }) {
                     //it remove book to the list
                     val newListOfBooks = it.filter { b -> b.isbn != book.isbn }
-                    update(context, newListOfBooks)
+                    saveBooksInBasket(context, newListOfBooks)
                 }
             }
         }
 
-        fun update(context: Context, newListOfBooks: List<Book>) {
+        fun saveBooksInBasket(context: Context, newListOfBooks: List<BasketBook>) {
             context.getSharedPreferences(sharedPreferencesName, PRIVATE_MODE).edit()
                 .putString(valueName, Gson().toJson(newListOfBooks)).apply()
         }
 
-        fun isBookIsInBasket(context: Context, bookToCheck: Book): Boolean {
+        fun getNbBookInBasket(context: Context, bookToCheck: Book): Int {
             getAllBooksInBasket(context).let {
-                return it.find { b -> b.isbn == bookToCheck.isbn } != null
+               return it.find { b -> b.isbn == bookToCheck.isbn }?.quantity ?: 0
             }
         }
 
         fun getTotalPrice(context: Context): Double {
             var totalPrice = 0.0
             getAllBooksInBasket(context).forEach { book ->
-                totalPrice += book.price
+                totalPrice += (book.price * book.quantity)
             }
             return totalPrice
         }

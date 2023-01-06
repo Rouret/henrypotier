@@ -11,11 +11,11 @@
 
     <ImageView
         android:id="@+id/book_image"
-        android:layout_width="120dp"
-        android:layout_height="120dp" />
+        android:layout_width="82dp"
+        android:layout_height="92dp" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="182dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
@@ -50,24 +50,38 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/item_basket_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="#5B5B5B"
-                android:text="Add to Cart"
-                android:textColor="#FFF" />
-
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/nb_in_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            tools:visibility="gone" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/remove_quantities"
+            android:layout_width="39dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="#5B5B5B"
+            android:text="-"
+            android:textColor="#FFF" />
+
+        <TextView
+            android:id="@+id/quantites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/add_quantities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="#5B5B5B"
+            android:text="+"
+            android:textColor="#FFF" />
     </LinearLayout>
 
 </LinearLayout>
