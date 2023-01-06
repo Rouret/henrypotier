@@ -82,7 +82,7 @@ class BasketService {
         fun getTotalPrice(context: Context): Double {
             var totalPrice = 0.0
             getAllBooksInBasket(context).forEach { book ->
-                totalPrice += book.price
+                totalPrice += (book.price * book.quantity)
             }
             return totalPrice
         }

@@ -47,11 +47,13 @@ class BooksListActivity : AppCompatActivity() {
         }
 
         booksListViewModel.dataSource.state.observe(this) { state ->
-            Toast.makeText(
-                this@BooksListActivity,
-                "${state.books.size} books | isLoading ${state.isLoading}",
-                Toast.LENGTH_SHORT
-            ).show()
+            if(state.isLoading){
+                Toast.makeText(
+                    this@BooksListActivity,
+                    "Chargement ...",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         booksListViewModel.dataSource.loadBooks()
@@ -64,7 +66,7 @@ class BooksListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        //TODO changer dynmaiquement la valeur des livres
+        booksAdapter.notifyDataSetChanged()
     }
 
     // onClick on button basket go to basket

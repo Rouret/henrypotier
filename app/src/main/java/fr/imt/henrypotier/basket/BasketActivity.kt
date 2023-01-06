@@ -34,6 +34,16 @@ class BasketActivity : AppCompatActivity() {
                 }
             }
         }
+
+        //run calculate total when list change froma dap )
+        booksAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                runBlocking {
+                    calculateTotal()
+                }
+            }
+        })
+
     }
 
     private suspend fun calculateTotal() {
