@@ -102,6 +102,11 @@ class BasketService {
             return Retrofit.Builder().baseUrl("https://henri-potier.techx.fr")
                 .addConverterFactory(GsonConverterFactory.create()).build()
         }
+
+        fun removeAllBooks(context: Context) {
+            context.getSharedPreferences(sharedPreferencesName, PRIVATE_MODE).edit()
+                .putString(valueName, "[]").apply()
+        }
     }
 
 
