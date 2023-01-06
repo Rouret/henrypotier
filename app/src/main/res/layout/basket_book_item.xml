@@ -12,10 +12,11 @@
         android:id="@+id/book_image"
         android:contentDescription="@string/book_cover"
         android:layout_width="82dp"
-        android:layout_height="92dp" />
+        android:layout_height="92dp"
+        />
 
     <LinearLayout
-        android:layout_width="182dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
@@ -57,11 +58,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <Button
             android:id="@+id/remove_quantities"
-            android:layout_width="39dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:background="#5B5B5B"
             android:text="@string/minus"
@@ -71,11 +73,12 @@
             android:id="@+id/quantites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_1" />
+            android:text="@string/_1"
+            android:paddingHorizontal="10dp"/>
 
         <Button
             android:id="@+id/add_quantities"
-            android:layout_width="wrap_content"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:background="#5B5B5B"
             android:text="@string/plus"
