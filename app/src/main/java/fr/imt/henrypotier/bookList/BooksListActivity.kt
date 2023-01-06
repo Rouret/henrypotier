@@ -28,7 +28,7 @@ class BooksListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.basket_recycler_view)
         recyclerView.adapter = booksAdapter
 
         BasketService.saveBooksInBasket(this, ArrayList())

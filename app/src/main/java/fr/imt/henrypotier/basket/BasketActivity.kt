@@ -9,22 +9,19 @@ import fr.imt.henrypotier.BasketService
 import fr.imt.henrypotier.R
 import fr.imt.henrypotier.bookDetail.BookDetailActivity
 import fr.imt.henrypotier.bookList.BOOK_ID
-import fr.imt.henrypotier.bookList.BooksAdapter
-import fr.imt.henrypotier.data.Book
+import fr.imt.henrypotier.data.BasketBook
 import fr.imt.henrypotier.data.CommercialOffer
 import kotlinx.coroutines.runBlocking
 
 class BasketActivity : AppCompatActivity() {
 
-    private lateinit var booksAdapter: BooksAdapter
+    private lateinit var booksAdapter: BasketBooksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
 
-        //TODO Changer d'adaptateur
-        //TODO Créer un cart_bookl_item.xml
-        booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
+        booksAdapter = BasketBooksAdapter { book -> adapterOnClick(book) }
 
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.adapter = booksAdapter
@@ -56,7 +53,7 @@ class BasketActivity : AppCompatActivity() {
     }
 
     /* Opens BookDetailActivity when RecyclerView item is clicked. */
-    private fun adapterOnClick(book: Book) {
+    private fun adapterOnClick(book: BasketBook) {
         val intent = Intent(this, BookDetailActivity()::class.java)
         intent.putExtra(BOOK_ID, book.isbn)
         startActivity(intent)

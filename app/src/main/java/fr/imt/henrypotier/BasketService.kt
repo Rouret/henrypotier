@@ -3,7 +3,7 @@ package fr.imt.henrypotier
 import android.content.Context
 import com.google.gson.Gson
 import fr.imt.henrypotier.data.Book
-import fr.imt.henrypotier.data.CartBook
+import fr.imt.henrypotier.data.BasketBook
 import fr.imt.henrypotier.data.CommercialOffer
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,11 +16,11 @@ class BasketService {
         private var valueName = "cart"
         private var PRIVATE_MODE = 0
 
-        fun getAllBooksInBasket(context: Context): List<CartBook> {
+        fun getAllBooksInBasket(context: Context): List<BasketBook> {
             val serializedObjects =
                 context.getSharedPreferences(sharedPreferencesName, PRIVATE_MODE)
                     .getString(valueName, "[]")
-            return Gson().fromJson(serializedObjects, Array<CartBook>::class.java).toList()
+            return Gson().fromJson(serializedObjects, Array<BasketBook>::class.java).toList()
         }
 
         fun addBooksToBasket(context: Context, book: Book) {
@@ -46,7 +46,7 @@ class BasketService {
             }
         }
 
-        fun saveBooksInBasket(context: Context, newListOfBooks: List<CartBook>) {
+        fun saveBooksInBasket(context: Context, newListOfBooks: List<BasketBook>) {
             context.getSharedPreferences(sharedPreferencesName, PRIVATE_MODE).edit()
                 .putString(valueName, Gson().toJson(newListOfBooks)).apply()
         }

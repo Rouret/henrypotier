@@ -12,15 +12,15 @@ open class Book {
         return "Book(isbn='$isbn', title='$title', price=$price, cover='$cover', synopsis=$synopsis)"
     }
 
-    fun factoryCartBook(): CartBook {
-        val cartBook = CartBook()
-        cartBook.isbn = this.isbn
-        cartBook.title = this.title
-        cartBook.price = this.price
-        cartBook.cover = this.cover
-        cartBook.synopsis = this.synopsis
-        cartBook.isInBasket = true
-        return cartBook
+    fun factoryCartBook(): BasketBook {
+        val basketBook = BasketBook()
+        basketBook.isbn = this.isbn
+        basketBook.title = this.title
+        basketBook.price = this.price
+        basketBook.cover = this.cover
+        basketBook.synopsis = this.synopsis
+        basketBook.isInBasket = true
+        return basketBook
     }
 
 }
