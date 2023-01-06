@@ -25,6 +25,7 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
         private val bookTextView: TextView = itemView.findViewById(R.id.book_title)
         private val bookPriceView: TextView = itemView.findViewById(R.id.book_price)
         private val basketButton: Button = itemView.findViewById(R.id.item_basket_button)
+        private val nbInCart : TextView = itemView.findViewById(R.id.nb_in_cart)
         private var currentBook: Book? = null
         //TODO Modifier pour avoir la ligne "x dans le panier" si le livre est déjà dans le panier
         init {
@@ -46,21 +47,13 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
 
             bookPriceView.text = String.format(book.price.toString() + "€")
 
-            if (book.isInBasket) {
-                basketButton.text = "-"
-                basketButton.setOnClickListener {
-                    BasketService.removeBookToBasket(itemView.context, book)
-                    book.isInBasket = false
-                }
-            } else {
-                basketButton.text = "+"
-                basketButton.setOnClickListener {
-                    book.isInBasket = true
-                    BasketService.addBooksToBasket(itemView.context, book)
-                    bindingAdapter?.notifyDataSetChanged()
-                }
-            }
 
+            basketButton.text = "+"
+            basketButton.setOnClickListener {
+                book.isInBasket = true
+                BasketService.addBooksToBasket(itemView.context, book)
+                bindingAdapter?.notifyDataSetChanged()
+            }
         }
     }
 

@@ -31,7 +31,7 @@ class BooksListActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.adapter = booksAdapter
 
-        BasketService.update(this, ArrayList())
+        BasketService.saveBooksInBasket(this, ArrayList())
 
         //TODO lorsqu'on a la liste des livres on check ce qui sont déjà dans le panier et leur quantité
         booksListViewModel.booksLiveData.observe(this) { it ->
@@ -40,7 +40,7 @@ class BooksListActivity : AppCompatActivity() {
                 //filter the cart
                 val newCart = basket.filter { book -> !it.books.contains(book) }
                 if (newCart.size != basket.size) {
-                    BasketService.update(this, newCart)
+                    BasketService.saveBooksInBasket(this, newCart)
                 }
                 it.books.map {
                     it.isInBasket = newCart.find { book -> book.isbn == it.isbn } != null
