@@ -25,14 +25,14 @@ class BasketService {
 
         fun addBooksToBasket(context: Context, book: Book) {
             getAllBooksInBasket(context).let {
-                it.find { cartBook -> cartBook.isbn == book.isbn }
-                    ?.let { cartBook -> {
-                        cartBook.quantity += 1
-                        saveBooksInBasket(context, it)
-                    } }
-                    ?: run {
-                        saveBooksInBasket(context, it.plus(book.factoryCartBook()))
-                    }
+                val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
+                if (cartBook != null) {
+                    cartBook.quantity += 1
+                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    saveBooksInBasket(context,  cart.plus(cartBook))
+                } else {
+                    saveBooksInBasket(context, it.plus(book.factoryCartBook()))
+                }
             }
         }
 

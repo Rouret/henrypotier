@@ -33,7 +33,6 @@ class BooksListActivity : AppCompatActivity() {
 
         BasketService.saveBooksInBasket(this, ArrayList())
 
-        //TODO lorsqu'on a la liste des livres on check ce qui sont déjà dans le panier et leur quantité
         booksListViewModel.booksLiveData.observe(this) { it ->
             if (!it.isLoading && it.books.isNotEmpty() && booksAdapter.currentList != it.books) {
                 val basket = BasketService.getAllBooksInBasket(this)
@@ -42,14 +41,9 @@ class BooksListActivity : AppCompatActivity() {
                 if (newCart.size != basket.size) {
                     BasketService.saveBooksInBasket(this, newCart)
                 }
-                it.books.map {
-                    it.isInBasket = newCart.find { book -> book.isbn == it.isbn } != null
-                }
                 //filter the result
                 booksAdapter.submitList(it.books)
             }
-
-            booksAdapter.submitList(it.books)
         }
 
         //TODO circular progress ?
@@ -72,7 +66,6 @@ class BooksListActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         //TODO changer dynmaiquement la valeur des livres
-        booksListViewModel.dataSource.loadBooks()
     }
 
     // onClick on button basket go to basket

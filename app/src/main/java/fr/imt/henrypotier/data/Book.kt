@@ -19,7 +19,7 @@ open class Book {
         cartBook.price = this.price
         cartBook.cover = this.cover
         cartBook.synopsis = this.synopsis
-        cartBook.isInBasket = this.isInBasket
+        cartBook.isInBasket = true
         return cartBook
     }
 
