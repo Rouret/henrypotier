@@ -28,7 +28,7 @@ class BooksListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
         booksAdapter = BooksAdapter { book -> adapterOnClick(book) }
-        val recyclerView: RecyclerView = findViewById(R.id.basket_recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.adapter = booksAdapter
 
         BasketService.saveBooksInBasket(this, ArrayList())
@@ -46,7 +46,6 @@ class BooksListActivity : AppCompatActivity() {
             }
         }
 
-        //TODO circular progress ?
         booksListViewModel.dataSource.state.observe(this) { state ->
             Toast.makeText(
                 this@BooksListActivity,

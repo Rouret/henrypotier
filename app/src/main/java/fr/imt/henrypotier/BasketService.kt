@@ -36,6 +36,28 @@ class BasketService {
             }
         }
 
+        fun addQuantityToBasketBook(context: Context, book: BasketBook) {
+            getAllBooksInBasket(context).let {
+                val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
+                if (cartBook != null) {
+                    cartBook.quantity += 1
+                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    saveBooksInBasket(context,  cart.plus(cartBook))
+                }
+            }
+        }
+
+        fun removeQuantityToBasketBook(context: Context, book: BasketBook) {
+            getAllBooksInBasket(context).let {
+                val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
+                if (cartBook != null) {
+                    cartBook.quantity -= 1
+                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    saveBooksInBasket(context,  cart.plus(cartBook))
+                }
+            }
+        }
+
         fun removeBookToBasket(context: Context, book: Book) {
             getAllBooksInBasket(context).let {
                 if (it.any { b -> b.isbn == book.isbn }) {

@@ -21,14 +21,13 @@ class BasketActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
 
-        booksAdapter = BasketBooksAdapter { book -> adapterOnClick(book) }
+        booksAdapter = BasketBooksAdapter { basketBook -> adapterOnClick(basketBook) }
 
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.basket_recycler_view)
         recyclerView.adapter = booksAdapter
 
         BasketService.getAllBooksInBasket(this).let {
             booksAdapter.submitList(it)
-
             if (it.isNotEmpty()) {
                 runBlocking {
                     calculateTotal()
@@ -53,9 +52,9 @@ class BasketActivity : AppCompatActivity() {
     }
 
     /* Opens BookDetailActivity when RecyclerView item is clicked. */
-    private fun adapterOnClick(book: BasketBook) {
+    private fun adapterOnClick(basketBook: BasketBook) {
         val intent = Intent(this, BookDetailActivity()::class.java)
-        intent.putExtra(BOOK_ID, book.isbn)
+        intent.putExtra(BOOK_ID, basketBook.isbn)
         startActivity(intent)
     }
 
