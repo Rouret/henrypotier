@@ -50,7 +50,7 @@ class BookDetailActivity : AppCompatActivity() {
         //set the book data to the UI elements
         bookName.text = book?.title
         bookDescription.text = book?.synopsis?.joinToString(separator = "") { it }
-        bookPrice.text = book?.price.toString()
+        bookPrice.text = String.format(book?.price.toString() + "€")
         Glide.with(this).load(book?.cover).into(bookImage)
 
 
