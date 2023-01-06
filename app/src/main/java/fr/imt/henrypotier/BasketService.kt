@@ -80,7 +80,9 @@ class BasketService {
         private fun getISBNs(context: Context): List<String> {
             val listISBN = mutableListOf<String>()
             getAllBooksInBasket(context).forEach { book ->
-                listISBN.add(book.isbn)
+                for (i in 1..book.quantity) {
+                    listISBN.add(book.isbn)
+                }
             }
             return listISBN
         }

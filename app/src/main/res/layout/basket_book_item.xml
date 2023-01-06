@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -24,7 +23,7 @@
             android:id="@+id/book_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Product Title"
+            android:text="@string/book_title"
             android:textColor="#000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -33,7 +32,7 @@
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fantasy"
+            android:text="@string/fantasy"
             android:textSize="14sp" />
 
         <RelativeLayout
@@ -45,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="$100"
+                android:text="@string/book_price"
                 android:textColor="#000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -65,14 +64,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="#5B5B5B"
-            android:text="-"
+            android:text="@string/minus"
             android:textColor="#FFF" />
 
         <TextView
             android:id="@+id/quantites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1" />
+            android:text="@string/_1" />
 
         <Button
             android:id="@+id/add_quantities"
@@ -80,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="#5B5B5B"
-            android:text="+"
+            android:text="@string/plus"
             android:textColor="#FFF" />
     </LinearLayout>
 

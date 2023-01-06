@@ -38,8 +38,12 @@ class BasketActivity : AppCompatActivity() {
         //run calculate total when list change froma dap )
         booksAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
-                runBlocking {
-                    calculateTotal()
+                BasketService.getAllBooksInBasket(this@BasketActivity).let {
+                    if (it.isNotEmpty()) {
+                        runBlocking {
+                            calculateTotal()
+                        }
+                    }
                 }
             }
         })
