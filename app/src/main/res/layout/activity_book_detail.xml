@@ -4,6 +4,7 @@
 
     <ImageView
         android:id="@+id/book_detail_image"
+        android:contentDescription="@string/book_cover"
         android:layout_width="260dp"
         android:layout_height="260dp"
         android:layout_centerHorizontal="true"
@@ -68,7 +69,8 @@
             android:background="#5B5B5B"
             android:padding="16dp"
             android:text="@string/add_to_cart"
-            android:textColor="#FFF" />
+            android:textColor="#FFF"
+            />
 
     </RelativeLayout>
 

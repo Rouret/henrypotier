@@ -28,7 +28,7 @@ class BasketService {
                 val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
                 if (cartBook != null) {
                     cartBook.quantity += 1
-                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    val cart = it.filter { aCartBook -> aCartBook.isbn != book.isbn }
                     saveBooksInBasket(context,  cart.plus(cartBook))
                 } else {
                     saveBooksInBasket(context, it.plus(book.factoryCartBook()))
@@ -42,7 +42,7 @@ class BasketService {
                 val cartBook = it.find { cartBook -> cartBook.isbn == book.isbn }
                 if (cartBook != null) {
                     cartBook.quantity -= 1
-                    var cart = it.filter { cartBook -> cartBook.isbn != book.isbn }
+                    val cart = it.filter { aCartBook -> aCartBook.isbn != book.isbn }
                     saveBooksInBasket(context,  cart.plus(cartBook))
                 }
             }

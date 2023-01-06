@@ -40,7 +40,7 @@ class BooksAdapter(private val onClick: (Book) -> Unit) :
         /* Bind book name and image. */
         fun bind(book: Book) {
             //Si le livre est déjà dans le panier on affiche le bouton "dans le panier" avec sa quantité
-            var nbInCart = BasketService.getNbBookInBasket( itemView.context,book);
+            val nbInCart = BasketService.getNbBookInBasket( itemView.context,book)
             if(nbInCart > 0) {
                 nbInCartTextView.visibility = View.VISIBLE
                 nbInCartTextView.text = itemView.context.getString(R.string.nb_in_basket, nbInCart.toString())

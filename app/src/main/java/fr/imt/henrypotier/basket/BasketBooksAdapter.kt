@@ -50,23 +50,26 @@ class BasketBooksAdapter(private val onClick: (BasketBook) -> Unit) :
             quantitiesTextView.text = book.quantity.toString()
 
             addQuantitiesButton.setOnClickListener {
-                BasketService.addBooksToBasket(itemView.context, book);
+                BasketService.addBooksToBasket(itemView.context, book)
                 book.quantity += 1
                 quantitiesTextView.text = book.quantity.toString()
                 bindingAdapter?.notifyDataSetChanged()
             }
 
             removeQuantitiesButton.setOnClickListener {
-                if(book.quantity == 1) {
-                    book.quantity = 0
-                    BasketService.removeBookToBasket(itemView.context, book);
-                    bindingAdapter?.notifyItemRemoved(adapterPosition)
-                }else if(book.quantity == 0){
-                    book.quantity = 1
-                    BasketService.addBooksToBasket(itemView.context, book);
-                }else{
-                    BasketService.removeQuantityToBasketBook(itemView.context, book);
-                    book.quantity -= 1
+                when (book.quantity) {
+                    1 -> {
+                        book.quantity = 0
+                        BasketService.removeBookToBasket(itemView.context, book)
+                    }
+                    0 -> {
+                        book.quantity = 1
+                        BasketService.addBooksToBasket(itemView.context, book)
+                    }
+                    else -> {
+                        BasketService.removeQuantityToBasketBook(itemView.context, book)
+                        book.quantity -= 1
+                    }
                 }
                 quantitiesTextView.text = book.quantity.toString()
                 bindingAdapter?.notifyDataSetChanged()
@@ -75,7 +78,7 @@ class BasketBooksAdapter(private val onClick: (BasketBook) -> Unit) :
     }
 
     /* Creates and inflates view and return BookViewHolder. */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketBooksAdapter.BasketBookViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketBookViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.basket_book_item, parent, false)
         return BasketBookViewHolder(view, onClick)
     }

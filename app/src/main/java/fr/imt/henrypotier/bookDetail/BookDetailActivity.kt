@@ -23,7 +23,7 @@ class BookDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_detail)
 
-        var currentBookId: String?
+        val currentBookId: String?
 
         //get the book id from the intent
         val intent = intent
@@ -36,18 +36,12 @@ class BookDetailActivity : AppCompatActivity() {
         //get the book from the view model
         val book: Book? = currentBookId?.let { bookDetailViewModel.getBookForId(it) }
 
-
         /* Connect variables to UI elements. */
         val bookName: TextView = findViewById(R.id.book_detail_title)
         val bookImage: ImageView = findViewById(R.id.book_detail_image)
         val bookDescription: TextView = findViewById(R.id.book_detail_description)
         val bookPrice: TextView = findViewById(R.id.book_detail_price)
         val addToCartButton: Button = findViewById(R.id.book_detail_add_to_cart)
-
-        val bundle: Bundle? = intent.extras
-        if (bundle != null) {
-            currentBookId = bundle.getString(BOOK_ID)
-        }
 
         //set the book data to the UI elements
         bookName.text = book?.title
@@ -62,7 +56,7 @@ class BookDetailActivity : AppCompatActivity() {
                     "Ajouté au panier",
                     Toast.LENGTH_SHORT
                 ).show()
-            };
+            }
         }
 
 

@@ -47,7 +47,7 @@ class BooksListActivity : AppCompatActivity() {
 
         BasketService.saveBooksInBasket(this, ArrayList())
 
-        booksListViewModel.booksLiveData.observe(this) { it ->
+        booksListViewModel.booksLiveData.observe(this) {
             if (!it.isLoading && it.books.isNotEmpty() && booksAdapter.currentList != it.books) {
                 val basket = BasketService.getAllBooksInBasket(this)
                 //filter the cart

@@ -18,6 +18,8 @@
     <string name="minus">-</string>
     <string name="_1">1</string>
     <string name="plus">+</string>
+    <string name="book_cover">Couverture du Livre</string>
+    <string name="btn_basket">Bouton Panier</string>
 
 
 </resources>

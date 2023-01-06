@@ -28,6 +28,7 @@
 
         <ImageButton
             android:id="@+id/basket_button"
+            android:contentDescription="@string/btn_basket"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/cart_shopping_solid"
             android:layout_width="0dp"
